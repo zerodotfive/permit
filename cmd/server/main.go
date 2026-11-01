@@ -15,6 +15,7 @@ func main() {
 	viper.SetDefault("API_LISTEN", "127.0.0.1:8091")
 	viper.SetDefault("DOCS_ENABLED", false)
 	viper.SetDefault("AUTH_ENABLED", true)
+	viper.SetDefault("AUTH_SCOPES", "openid profile email groups")
 	viper.SetDefault("POSTGRES_URI", "postgres://postgres:password@localhost:5432/permit?sslmode=prefer")
 	viper.SetDefault("MIGRATE", true)
 	viper.AutomaticEnv()
@@ -31,6 +32,7 @@ func main() {
 			AuthClientID:              viper.GetString("AUTH_CLIENT_ID"),
 			AuthClientSecret:          viper.GetString("AUTH_CLIENT_SECRET"),
 			AuthRedirectURL:           viper.GetString("AUTH_REDIRECT_URL"),
+			AuthScopes:                viper.GetStringSlice("AUTH_SCOPES"),
 			OpenIDConfigurationIssuer: viper.GetString("OPENID_CONFIGURATION_ISSUER"),
 			JWTKey:                    viper.GetString("JWT_KEY"),
 			AdminGroup:                viper.GetString("ADMIN_GROUP"),

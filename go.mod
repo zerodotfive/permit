@@ -7,7 +7,7 @@ require (
 	github.com/jackc/pgx/v5 v5.11.0
 	github.com/pressly/goose/v3 v3.29.0
 	github.com/spf13/viper v1.21.0
-	github.com/zerodotfive/appcore v0.0.0-20261101111659-4275d8a385bc
+	github.com/zerodotfive/appcore v0.0.0-20261101202702-061818dba5a0
 )
 
 require (
