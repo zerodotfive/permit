@@ -1,6 +1,6 @@
 package types
 
-import "github.com/zerodotfive/appcore/auth/types"
+import "github.com/zerodotfive/appcore/auth/oidc/types"
 
 type Config struct {
 	PubListen        string

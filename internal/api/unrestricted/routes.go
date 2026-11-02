@@ -3,7 +3,7 @@ package unrestricted
 import (
 	"net/http"
 
-	"github.com/zerodotfive/appcore/auth/handler"
+	"github.com/zerodotfive/appcore/auth/oidc/handler"
 	"github.com/zerodotfive/permit/internal/api/unrestricted/health"
 	"github.com/zerodotfive/permit/internal/app/types"
 )

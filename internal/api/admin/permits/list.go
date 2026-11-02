@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/zerodotfive/appcore/auth/types"
+	"github.com/zerodotfive/appcore/auth/oidc/types"
 	"github.com/zerodotfive/permit/internal/permits"
 )
 

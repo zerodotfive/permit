@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/spf13/viper"
-	appcoreAuthTypes "github.com/zerodotfive/appcore/auth/types"
+	appcoreAuthTypes "github.com/zerodotfive/appcore/auth/oidc/types"
 	"github.com/zerodotfive/permit/internal/app"
 	"github.com/zerodotfive/permit/internal/app/types"
 )
