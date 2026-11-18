@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/zerodotfive/appcore/auth/oidc/types"
+	"github.com/zerodotfive/appcore/auth"
 	"github.com/zerodotfive/permit/internal/permits"
 )
 
@@ -18,7 +18,7 @@ type ModelPermitListResponseBody struct {
 	Permits []permits.PermitShort `json:"permits"`
 }
 type ModelPermitListRequest struct {
-	RemoteIP string `header:"X-Forwarded-For" required:"true"`
+	RemoteIP string `header:"X-Forwarded-For" required:"false"`
 }
 
 var respListError = &ModelPermitListResponse{
@@ -29,7 +29,7 @@ var respListError = &ModelPermitListResponse{
 }
 
 func (h *Handler) list(ctx context.Context, request *ModelPermitListRequest) (*ModelPermitListResponse, error) {
-	userInfo, ok := ctx.Value("userInfo").(*types.UserInfo)
+	userInfo, ok := ctx.Value("userInfo").(*auth.UserInfo)
 	if !ok {
 		h.logger.Printf("remoteIP=%s admin.list: user info not in context", request.RemoteIP)
 		return respListError, nil

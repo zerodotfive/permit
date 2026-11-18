@@ -178,6 +178,8 @@ Permit is configured using environment variables.
 | `OPENID_CONFIGURATION_ISSUER` | — | OIDC discovery issuer URL. |
 | `JWT_KEY` | — | JWT signing key (minimum 32 bytes). |
 | `ADMIN_GROUP` | — | Group allowed to administer permits. |
+| `STATIC_TOKEN_ENABLED` | false | Enable auth with static token. |
+| `STATIC_TOKEN` | false | Static token shas256. |
 
 The public and administration listeners are separate:
 

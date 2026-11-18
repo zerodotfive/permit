@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/spf13/viper"
-	appcoreAuthTypes "github.com/zerodotfive/appcore/auth/oidc/types"
+	"github.com/zerodotfive/appcore/auth/oidc"
 	"github.com/zerodotfive/permit/internal/app"
 	"github.com/zerodotfive/permit/internal/app/types"
 )
@@ -28,16 +28,18 @@ func main() {
 		ApiListen:        viper.GetString("API_LISTEN"),
 		DocsEnabled:      viper.GetBool("DOCS_ENABLED"),
 		AuthEnabled:      viper.GetBool("AUTH_ENABLED"),
-		AuthConfig: &appcoreAuthTypes.AuthConfig{
+		OAuthConfig: &oidc.OAuthConfig{
 			AuthClientID:              viper.GetString("AUTH_CLIENT_ID"),
 			AuthClientSecret:          viper.GetString("AUTH_CLIENT_SECRET"),
 			AuthRedirectURL:           viper.GetString("AUTH_REDIRECT_URL"),
 			AuthScopes:                viper.GetStringSlice("AUTH_SCOPES"),
 			OpenIDConfigurationIssuer: viper.GetString("OPENID_CONFIGURATION_ISSUER"),
 			JWTKey:                    viper.GetString("JWT_KEY"),
-			AdminGroup:                viper.GetString("ADMIN_GROUP"),
 		},
-		PostgresURI: viper.GetString("POSTGRES_URI"),
-		Migrate:     viper.GetBool("MIGRATE"),
+		AdminGroup:         viper.GetString("ADMIN_GROUP"),
+		StaticTokenEnabled: viper.GetBool("STATIC_TOKEN_ENABLED"),
+		StaticTokenSHA256:  viper.GetString("STATIC_TOKEN"),
+		PostgresURI:        viper.GetString("POSTGRES_URI"),
+		Migrate:            viper.GetBool("MIGRATE"),
 	})
 }

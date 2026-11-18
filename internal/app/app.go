@@ -10,8 +10,9 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"
-	appcoreAuthHelper "github.com/zerodotfive/appcore/auth/oidc/helper"
-	appcoreAuthTypes "github.com/zerodotfive/appcore/auth/oidc/types"
+	"github.com/zerodotfive/appcore/auth"
+	"github.com/zerodotfive/appcore/auth/oidc"
+	"github.com/zerodotfive/appcore/auth/token/static"
 	"github.com/zerodotfive/permit/internal/api/admin"
 	"github.com/zerodotfive/permit/internal/api/unrestricted"
 	"github.com/zerodotfive/permit/internal/app/types"
@@ -30,8 +31,12 @@ func Run(config *types.Config) {
 	log.SetPrefix("[" + info.Application + "] ")
 	log.Printf(info.Application+" version %s", info.ApplicationVersion)
 
-	if config.AuthEnabled && len(config.AuthConfig.JWTKey) < 32 {
+	if config.AuthEnabled && len(config.OAuthConfig.JWTKey) < 32 {
 		log.Fatal(errors.New("JWT key length must be at least 32 bytes"))
+	}
+
+	if config.StaticTokenEnabled && len(config.StaticTokenSHA256) != 64 {
+		log.Fatal(errors.New("StaticTokenSHA256 length must be 64 bytes"))
 	}
 
 	postgres, err := pgxpool.New(context.Background(), config.PostgresURI)
@@ -75,7 +80,7 @@ func Run(config *types.Config) {
 
 	unauthorized, _ := ui.GetEmbedHTMLBytes("unauthorized.html")
 	forbidden, _ := ui.GetEmbedHTMLBytes("forbidden.html")
-	statusPages := appcoreAuthTypes.StatusPages{
+	statusPages := auth.StatusPages{
 		Unauthorized: unauthorized,
 		Forbidden:    forbidden,
 	}
@@ -92,7 +97,11 @@ func Run(config *types.Config) {
 
 	humaAdminRestricted := huma.NewGroup(humaRoot, "")
 	if config.AuthEnabled {
-		humaAdminRestricted.UseMiddleware(appcoreAuthHelper.NewAdminAuthMiddleware(container.Config.AuthConfig, &statusPages))
+		if config.StaticTokenEnabled {
+			humaAdminRestricted.UseMiddleware(static.NewTokenAuthMiddleware("static", config.StaticTokenSHA256))
+		}
+		humaAdminRestricted.UseMiddleware(oidc.NewOIDCAuthMiddleware("oidc", container.Config.OAuthConfig, []string{container.Config.AdminGroup}))
+		humaAdminRestricted.UseMiddleware(auth.NewAuthSolverMiddleware(&statusPages, []string{"static", "oidc"}))
 	}
 
 	humaAdminRestrictedAPI := huma.NewGroup(humaAdminRestricted, "/api/"+info.ApiVersion)

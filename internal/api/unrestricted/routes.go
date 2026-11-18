@@ -10,5 +10,5 @@ import (
 
 func RegisterRoutes(apiRouter *http.ServeMux, container types.Container) {
 	health.Register(apiRouter, container)
-	handler.Register(apiRouter, container.Config.AuthConfig, container.Logger)
+	handler.Register(apiRouter, container.Config.OAuthConfig, container.Logger)
 }

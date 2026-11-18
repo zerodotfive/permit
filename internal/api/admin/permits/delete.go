@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"uuid"
 
-	"github.com/zerodotfive/appcore/auth/oidc/types"
+	"github.com/zerodotfive/appcore/auth"
 	"github.com/zerodotfive/permit/internal/permits"
 )
 
@@ -30,7 +30,7 @@ var respDeleteError = &ModelPermitDeleteResponse{
 }
 
 func (h *Handler) delete(ctx context.Context, request *ModelPermitDeleteRequest) (*ModelPermitDeleteResponse, error) {
-	userInfo, ok := ctx.Value("userInfo").(*types.UserInfo)
+	userInfo, ok := ctx.Value("userInfo").(*auth.UserInfo)
 	if !ok {
 		h.logger.Printf("remoteIP=%s admin.delete: user info not in context", request.RemoteIP)
 		return respDeleteError, nil

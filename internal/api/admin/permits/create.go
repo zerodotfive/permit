@@ -11,7 +11,7 @@ import (
 	"time"
 	"uuid"
 
-	"github.com/zerodotfive/appcore/auth/oidc/types"
+	"github.com/zerodotfive/appcore/auth"
 	"github.com/zerodotfive/permit/internal/permits"
 )
 
@@ -46,7 +46,7 @@ var respCreateError = &ModelPermitCreateResponse{
 }
 
 func (h *Handler) create(ctx context.Context, request *ModelPermitCreateRequest) (*ModelPermitCreateResponse, error) {
-	userInfo, ok := ctx.Value("userInfo").(*types.UserInfo)
+	userInfo, ok := ctx.Value("userInfo").(*auth.UserInfo)
 	if !ok {
 		h.logger.Printf("remoteIP=%s admin.create: user info not in context", request.RemoteIP)
 		return respCreateError, nil
